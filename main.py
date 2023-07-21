@@ -25,12 +25,10 @@ special_food_type = ["Chef's Specials"]
 # Máximo permitido de alimentos en un pedido
 max_items_per_order = 100
 
-
 def show_menu():
     print("Menu:")
     for key, value in food_options.items():
         print(f"{key}. {value['name']} ({value['type']}): ${value['price']}")
-
 
 def request_user_input(message):
     try:
@@ -38,7 +36,6 @@ def request_user_input(message):
     except KeyboardInterrupt:
         print("\nPedido cancelado.")
         sys.exit()
-
 
 def check_quantity(amount):
     try:
@@ -50,8 +47,7 @@ def check_quantity(amount):
     except ValueError:
         return None
 
-
-def compute_order_cost(order):
+def compute_order_cost(order, food_options):  # Aquí está el cambio
     total_price = 0
     for food, amount in order.items():
         cost = food_options[food]['price']
@@ -72,7 +68,6 @@ def compute_order_cost(order):
             total_price += food_options[food]['price'] * amount * 0.05
 
     return total_price
-
 
 def validate_order(order):
     # Verificar si los alimentos seleccionados están en el menú
@@ -95,7 +90,6 @@ def validate_order(order):
 
     return True
 
-
 def finalize_order(order, total_price):
     print("\nComidas seleccionadas:")
     for food, amount in order.items():
@@ -110,7 +104,6 @@ def finalize_order(order, total_price):
     else:
         print("Pedido cancelado.")
         return -1
-
 
 def run_order_system():
     show_menu()
@@ -134,9 +127,8 @@ def run_order_system():
     if not validate_order(order):
         return -1
 
-    total_price = compute_order_cost(order)
+    total_price = compute_order_cost(order, food_options)  # Aquí está el cambio
     return finalize_order(order, total_price)
-
 
 if __name__ == '__main__':
     order_result = run_order_system()
