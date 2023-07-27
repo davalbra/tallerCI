@@ -5,6 +5,8 @@ food_options = {
     "1": {"name": "Spaghetti", "type": "Italian", "price": 8},
     "2": {"name": "Sushi", "type": "Japanese", "price": 10},
     "3": {"name": "Tacos", "type": "Mexican", "price": 6},
+    "4": {"name": "Tacos", "type": "Chef's Specials", "price": 20},
+
 }
 
 # Descuentos disponibles
@@ -18,7 +20,8 @@ special_discount_rules = {
     50: 10,   
     100: 25   
 }
-
+print ("holaaaaaaaaaa", max(discount_rules.values()))
+print ("chaoooo", max(discount_rules.keys()))
 # Alimentos de categoría especial
 special_food_type = ["Chef's Specials"]
 
@@ -31,11 +34,8 @@ def show_menu():
         print(f"{key}. {value['name']} ({value['type']}): ${value['price']}")
 
 def request_user_input(message):
-    try:
         return input(message)
-    except KeyboardInterrupt:
-        print("\nPedido cancelado.")
-        sys.exit()
+
 
 def check_quantity(amount):
     try:
@@ -53,9 +53,14 @@ def compute_order_cost(order, food_options):  # Aquí está el cambio
         cost = food_options[food]['price']
         total_price += cost * amount
 
+    # Calcular la cantidad total de productos en el pedido
+    total_quantity = sum(order.values())
+
     # Aplicar descuento si aplica
-    if len(order) > max(discount_rules.keys()):
-        total_price *= (1 - max(discount_rules.values()))
+    discount_keys = [key for key in discount_rules.keys() if total_quantity >= key]
+    if discount_keys:
+        discount = discount_rules[max(discount_keys)]
+        total_price *= (1 - discount)
 
     # Aplicar descuento especial si aplica
     for limit, discount in special_discount_rules.items():
@@ -134,3 +139,6 @@ if __name__ == '__main__':
     order_result = run_order_system()
     if order_result != -1:
         print(f"\n¡Gracias por su pedido! Costo total: ${order_result}")
+        
+
+
